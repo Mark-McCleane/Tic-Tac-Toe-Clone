@@ -1,5 +1,7 @@
 package com.example.xvso;
 
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,11 +17,12 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     private int player2Points;
     private TextView tvPlayer1;
     private TextView tvPlayer2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        this.setTitle("X's Vs O's");
         tvPlayer1 = findViewById(R.id.tv_01);
         tvPlayer2 = findViewById(R.id.tv_02);
 
@@ -35,9 +38,18 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         btn_reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetBoard();
+                resetGame();
             }
         });
+    }
+
+    private void resetGame() {
+        resetBoard();
+        player1Points = 0;
+        player2Points = 0;
+        roundCount = 0;
+        player1Turn = true;
+        updatePoints();
     }
 
     @Override
@@ -47,21 +59,18 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         }
         if(player1Turn == true){
             ((Button) v).setText("X");
-        }
-        else {
-            ((Button) v).setText("Y");
+        } else {
+            ((Button) v).setText("O");
         }
         roundCount++;
 
         if(checkForWin() == true){
             if(player1Turn == true){
                 player1Wins();
-            }
-            else {
+            } else {
                 player2Wins();
             }
-        }
-        else if(roundCount == 9){
+        } else if(roundCount == 9){
             tieGame();
         }
         player1Turn = !player1Turn; //switch turns
@@ -80,7 +89,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     }
 
     private void resetBoard() {
-        for(int i = 0; i < 3;i++){
+        for(int i = 0; i < 3; i++){
             for (int j = 0; j <3; j++) {
                 buttons[i][j].setText("");
             }
@@ -92,7 +101,6 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     private void updatePoints() {
         tvPlayer1.setText("Player 1: " + player1Points);
         tvPlayer2.setText("Player 2: " + player2Points);
-
     }
 
     private void player1Wins() {
@@ -131,9 +139,29 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
             return true;
         }
 
-        if(field[0][2].equals(field[1][1]) && field[0][2].equals(field[2][0]) && !field[0][2].equals("")){
-            return true;
-        }
-        return false; //no win
+        return field[0][2].equals(field[1][1]) && field[0][2].equals(field[2][0]) && !field[0][2].equals("");
+    }
+
+    /*
+        private int player1Points;
+        private int player2Points;
+        */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("roundCount", roundCount);
+        outState.putInt("player1Points", player1Points);
+        outState.putInt("player2Points", player2Points);
+        outState.putBoolean("player1Turn", player1Turn);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        roundCount = savedInstanceState.getInt("roundCount");
+        player1Points = savedInstanceState.getInt("player1Points");
+        player2Points = savedInstanceState.getInt("player2Points");
+        player1Turn = savedInstanceState.getBoolean("player1Turn");
     }
 }
