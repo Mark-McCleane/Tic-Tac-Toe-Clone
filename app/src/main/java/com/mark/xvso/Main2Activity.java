@@ -1,4 +1,4 @@
-package com.example.xvso;
+package com.mark.xvso;
 
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -29,7 +29,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 String btnID = "btn_" + i + j;
-                int resID = getResources().getIdentifier(btnID,"id",getPackageName());
+                int resID = getResources().getIdentifier(btnID, "id", getPackageName());
                 buttons[i][j] = findViewById(resID);
                 buttons[i][j].setOnClickListener(this);
             }
@@ -54,23 +54,23 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if(!((Button) v).getText().toString().equals("")){
+        if (!((Button) v).getText().toString().equals("")) {
             return; //string not empty, so cant be edited
         }
-        if(player1Turn == true){
+        if (player1Turn == true) {
             ((Button) v).setText("X");
         } else {
             ((Button) v).setText("O");
         }
         roundCount++;
 
-        if(checkForWin() == true){
-            if(player1Turn == true){
+        if (checkForWin() == true) {
+            if (player1Turn == true) {
                 player1Wins();
             } else {
                 player2Wins();
             }
-        } else if(roundCount == 9){
+        } else if (roundCount == 9) {
             tieGame();
         }
         player1Turn = !player1Turn; //switch turns
@@ -89,8 +89,8 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     }
 
     private void resetBoard() {
-        for(int i = 0; i < 3; i++){
-            for (int j = 0; j <3; j++) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
                 buttons[i][j].setText("");
             }
         }
@@ -119,23 +119,23 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         }
 
         for (int i = 0; i < 3; i++) {
-            if(field[i][0].equals(field[i][1]) && field[i][0].equals(field[i][2]) && !field[i][0].equals("")){
+            if (field[i][0].equals(field[i][1]) && field[i][0].equals(field[i][2]) && !field[i][0].equals("")) {
                 return true;
             }
         }
 
         for (int i = 0; i < 3; i++) {
-            if(field[0][i].equals(field[1][i]) && field[0][i].equals(field[2][i]) && !field[0][i].equals("")){ //rows
+            if (field[0][i].equals(field[1][i]) && field[0][i].equals(field[2][i]) && !field[0][i].equals("")) { //rows
                 return true;
             }
         }
 
         for (int i = 0; i < 3; i++) {
-            if(field[i][0].equals(field[i][1]) && field[i][0].equals(field[i][2]) && !field[i][0].equals("")){ //columns
+            if (field[i][0].equals(field[i][1]) && field[i][0].equals(field[i][2]) && !field[i][0].equals("")) { //columns
                 return true;
             }
         }
-        if(field[0][0].equals(field[1][1]) && field[0][0].equals(field[2][2]) && !field[0][0].equals("")){
+        if (field[0][0].equals(field[1][1]) && field[0][0].equals(field[2][2]) && !field[0][0].equals("")) {
             return true;
         }
 
